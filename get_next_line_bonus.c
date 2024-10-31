@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-char	*readfile(int fd, char *buf)
+char	*readfile(char *buf, int fd)
 {
 	char	*buffer;
 	int		i;
@@ -52,22 +52,22 @@ char	*update(char *line, char *buf)
 char	*get_next_line(int fd)
 {
 	char		*ligne;
-	static char	*buffer = NULL;
+	static char	*buffer[1024];
 	size_t		len;
 
 	len = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = readfile(fd, buffer);
-	if (!buffer)
+	buffer[fd] = readfile(buffer[fd], fd);
+	if (!buffer[fd])
 	{
-		free(buffer);
+		free(buffer[fd]);
 		return (NULL);
 	}
-	while (buffer[len] != '\0' && buffer[len] != '\n')
+	while (buffer[fd][len] != '\0' && buffer[fd][len] != '\n')
 		len++;
-	ligne = ft_substr(buffer, 0, len + 1);
-	buffer = update(ligne, buffer);
+	ligne = ft_substr(buffer[fd], 0, len + 1);
+	buffer[fd] = update(ligne, buffer[fd]);
 	return (ligne);
 }
 
