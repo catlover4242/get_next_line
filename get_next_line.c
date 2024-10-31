@@ -60,10 +60,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	buffer = readfile(fd, buffer);
 	if (!buffer)
-	{
-		free(buffer);
 		return (NULL);
-	}
 	while (buffer[len] != '\0' && buffer[len] != '\n')
 		len++;
 	ligne = ft_substr(buffer, 0, len + 1);
